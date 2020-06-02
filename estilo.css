@@ -1,5 +1,20 @@
 body{
     overflow-x: hidden;
     overflow-y: hidden;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color: black;
+}
+.navJogador{
+    width: 192px;
+    height: 224px;
+    background-image: url("futurenave.gif");
+    position: absolute;
+}
+.telaMsg{
+    position: absolute;
+    margin-left: -25%;
+    top: 50px;
+    left: 50%;
+    width: 720px;
+    height: 600px;
 }
