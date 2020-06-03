@@ -126,7 +126,7 @@ function inicia(){
     clearInterval(allienShipInterval);
     allienShipCount=150;
     velAllienShip=2;
-    allienShipInterval=setInterval(createAllienShip,1000);
+    allienShipInterval=setInterval(createAllienShip,1800);
 
     //Controle do Planeta
     planetHpBar=100;
