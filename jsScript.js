@@ -138,8 +138,8 @@ function inicia(){
     dirxJ=diryJ=0;
     pjx=screenSizeW/2;
     pjy=screeSizeH/2;
-    velJ=10;
-    velS=16;
+    velJ=18;
+    velS=24;
     jog=document.getElementById("navJogador");
     jog.style.top=pjy+"px";
     jog.style.left=pjx+"px";
