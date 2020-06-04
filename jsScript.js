@@ -81,6 +81,7 @@ function shootingClean(){
             var ps=shoots[i].offsetTop;
             ps-=velS;
             shoots[i].style.top=ps+"px";
+            collisionAllienShip(shoots[i]);
             if(ps<0){
                 shoots[i].remove();
             }
@@ -88,6 +89,28 @@ function shootingClean(){
     }
 }
 
+function collisionAllienShip(tiro){
+	var tam=allienShipTotal.length;
+	for(var i=0;i<tam;i++){
+		if(allienShipTotal[i]){
+			if(
+				(
+					(tiro.offsetTop<=(allienShipTotal[i].offsetTop+80))&& //Cima tiro com baixo bomba
+					((tiro.offsetTop+16)>=(allienShipTotal[i].offsetTop)) //Baixo tiro com cima bomba
+				)
+				&&
+				(
+					(tiro.offsetLeft<=(allienShipTotal[i].offsetLeft+80))&& //Esquerda tiro com direita bomba
+					((tiro.offsetLeft+16)>=(allienShipTotal[i].offsetLeft)) //Direita Tito  com esquerda Bomba
+				)
+			){
+				
+				allienShipTotal[i].remove();
+				tiro.remove();
+			}
+		}
+	}
+}
 function controlaJogador(){
    pjy+=diryJ*velJ;
    pjx+=dirxJ*velJ;
@@ -99,7 +122,7 @@ function gameLoop(){
     if(game){    //controles funcoes
        controlaJogador();
        shootingClean();
-      
+    
        controlAllienShip();
        
     }
@@ -115,8 +138,8 @@ function inicia(){
     dirxJ=diryJ=0;
     pjx=screenSizeW/2;
     pjy=screeSizeH/2;
-    velJ=8;
-    velS=14;
+    velJ=10;
+    velS=16;
     jog=document.getElementById("navJogador");
     jog.style.top=pjy+"px";
     jog.style.left=pjx+"px";

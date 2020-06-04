@@ -34,11 +34,10 @@ body{
     background-color: rgb(9, 184, 38);
 }
 .shootJog{
-    width: 10px;
-    height: 12px;
+    width: 16px;
+    height: 16px;
     background-color: rgb(255, 230, 4);
-    border-radius: 12px;
-    
+    border-radius: 16px;
     position: absolute;
 
 }
