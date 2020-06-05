@@ -6,6 +6,7 @@ var frames;
 var allienShipCount,painelAllienShip,velAllienShip,allienShipInterval;
 var allienShipTotal;
 var planetHpBar;
+var indiceExplosao,indiceSound;
 
 function teclaDw(){
     var tecla=event.keyCode;
@@ -57,6 +58,7 @@ function controlAllienShip(){
             allienShipTotal[i].style.top=pi+"px";
             if(pi>screeSizeH){
                 planetHpBar-=10;
+                criaExplosao(2,allienShipTotal[i].offsetLeft,null);
                 allienShipTotal[i].remove();
             }
         }
@@ -104,13 +106,57 @@ function collisionAllienShip(tiro){
 					((tiro.offsetLeft+16)>=(allienShipTotal[i].offsetLeft)) //Direita Tito  com esquerda Bomba
 				)
 			){
-				
+				criaExplosao(1,allienShipTotal[i].offsetLeft-25,allienShipTotal[i].offsetTop);
 				allienShipTotal[i].remove();
 				tiro.remove();
 			}
 		}
 	}
 }
+function criaExplosao(tipo,x,y){ 
+	if(document.getElementById("explosao"+(indiceExplosao-3))){
+		document.getElementById("explosao"+(indiceExplosao-3)).remove();
+	}
+	var explosao=document.createElement("div");
+	var img=document.createElement("img");
+	var som=document.createElement("audio");
+	//Atributos para div
+	var att1=document.createAttribute("class");
+	var att2=document.createAttribute("style");
+	var att3=document.createAttribute("id");
+	//Atributo para imagem
+	var att4=document.createAttribute("src");
+	//Atributos para audio
+	var att5=document.createAttribute("src");
+	var att6=document.createAttribute("id");
+
+	att3.value="explosao"+indiceExplosao;
+	if(tipo==1){
+		att1.value="explosionShip";
+		att2.value="top:"+y+"px;left:"+x+"px;";
+		att4.value="explosaoShip.gif?"+new Date();
+	}else{
+		att1.value="explosionPlanet";
+		att2.value="top:"+(screeSizeH-57)+"px;left:"+(x-17)+"px;";
+		att4.value="explosaoPlanet.gif?"+new Date();
+	}
+	att5.value="explosiontrack.mp3?"+new Date();
+	att6.value="som"+indiceSound;
+	explosao.setAttributeNode(att1);
+	explosao.setAttributeNode(att2);
+	explosao.setAttributeNode(att3);
+	img.setAttributeNode(att4);
+	som.setAttributeNode(att5);
+	som.setAttributeNode(att6);
+	explosao.appendChild(img);
+	explosao.appendChild(som);
+	document.body.appendChild(explosao);
+	document.getElementById("som"+indiceSound).play();
+	indiceExplosao++;
+	indiceSound++;
+
+}
+
 function controlaJogador(){
    pjy+=diryJ*velJ;
    pjx+=dirxJ*velJ;
@@ -143,16 +189,21 @@ function inicia(){
     jog=document.getElementById("navJogador");
     jog.style.top=pjy+"px";
     jog.style.left=pjx+"px";
+    
 
     //Controle das Allien Ships
     
     clearInterval(allienShipInterval);
     allienShipCount=150;
-    velAllienShip=2;
-    allienShipInterval=setInterval(createAllienShip,1800);
+    velAllienShip=4;
+    allienShipInterval=setInterval(createAllienShip,1600);
 
     //Controle do Planeta
     planetHpBar=100;
+
+    //Explosion control
+    indiceExplosao=indiceSound=0;
+    
 
     gameLoop();
 

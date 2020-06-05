@@ -47,3 +47,13 @@ body{
     background-image: url(alienShipModel.gif);
     position: absolute;
 }
+.explosionPlanet{
+    width: 55px;
+    height: 57px;
+    position: absolute;
+}
+.explosionShip{
+    width: 70px;
+    height: 70px;
+    position: absolute;
+}
