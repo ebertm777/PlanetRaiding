@@ -1,12 +1,13 @@
 var diryJ,dirxJ,jog,velJ,pjx,pjy;
 var velS;
-var screenSizeW,screeSizeH;
+var screenSizeW,screenSizeH;
 var game;
 var frames;
 var allienShipCount,painelAllienShip,velAllienShip,allienShipInterval;
 var allienShipTotal;
-var planetHpBar;
+var planetHpBar,planetBar;
 var indiceExplosao,indiceSound;
+var screenMsg;
 
 function teclaDw(){
     var tecla=event.keyCode;
@@ -56,7 +57,7 @@ function controlAllienShip(){
             var pi=allienShipTotal[i].offsetTop;
             pi+=velAllienShip;
             allienShipTotal[i].style.top=pi+"px";
-            if(pi>screeSizeH){
+            if(pi>screenSizeH){
                 planetHpBar-=10;
                 criaExplosao(2,allienShipTotal[i].offsetLeft,null);
                 allienShipTotal[i].remove();
@@ -97,13 +98,13 @@ function collisionAllienShip(tiro){
 		if(allienShipTotal[i]){
 			if(
 				(
-					(tiro.offsetTop<=(allienShipTotal[i].offsetTop+80))&& //Cima tiro com baixo bomba
-					((tiro.offsetTop+16)>=(allienShipTotal[i].offsetTop)) //Baixo tiro com cima bomba
+					(tiro.offsetTop<=(allienShipTotal[i].offsetTop+80))&& 
+					((tiro.offsetTop+16)>=(allienShipTotal[i].offsetTop))
 				)
 				&&
 				(
-					(tiro.offsetLeft<=(allienShipTotal[i].offsetLeft+80))&& //Esquerda tiro com direita bomba
-					((tiro.offsetLeft+16)>=(allienShipTotal[i].offsetLeft)) //Direita Tito  com esquerda Bomba
+					(tiro.offsetLeft<=(allienShipTotal[i].offsetLeft+80))&& 
+					((tiro.offsetLeft+16)>=(allienShipTotal[i].offsetLeft)) 
 				)
 			){
 				criaExplosao(1,allienShipTotal[i].offsetLeft-25,allienShipTotal[i].offsetTop);
@@ -114,8 +115,8 @@ function collisionAllienShip(tiro){
 	}
 }
 function criaExplosao(tipo,x,y){ 
-	if(document.getElementById("explosao"+(indiceExplosao-3))){
-		document.getElementById("explosao"+(indiceExplosao-3)).remove();
+	if(document.getElementById("explosao"+(indiceExplosao-4))){
+		document.getElementById(`explosao${indiceExplosao - 4}`).remove();
 	}
 	var explosao=document.createElement("div");
 	var img=document.createElement("img");
@@ -137,7 +138,7 @@ function criaExplosao(tipo,x,y){
 		att4.value="explosaoShip.gif?"+new Date();
 	}else{
 		att1.value="explosionPlanet";
-		att2.value="top:"+(screeSizeH-57)+"px;left:"+(x-17)+"px;";
+		att2.value="top:"+(screenSizeH-57)+"px;left:"+(x-17)+"px;";
 		att4.value="explosaoPlanet.gif?"+new Date();
 	}
 	att5.value="explosiontrack.mp3?"+new Date();
@@ -164,48 +165,94 @@ function controlaJogador(){
    jog.style.left=pjx+"px";
 }
 
+function gameControl(){
+   planetBar.style.width=planetHpBar+"px";
+   if(allienShipCount<=0){
+       game=false;
+       clearInterval(allienShipInterval);
+       screenMsg.style.backgroundImage="url('vitoria1.png')";
+       screenMsg.style.display="block";
+   }
+   if(planetHpBar<=0){
+       game=false;
+       screenMsg.style.backgroundImage="url('derrota.png')";
+       screenMsg.style.display="block";
+
+   }
+}
 function gameLoop(){
     if(game){    //controles funcoes
        controlaJogador();
        shootingClean();
-    
-       controlAllienShip();
-       
+       controlAllienShip(); 
     }
-    frames=requestAnimationFrame(gameLoop)
+    gameControl();
+    frames=requestAnimationFrame(gameLoop);
 }
-function inicia(){
+function restartGame(){
+    allienShipTotal=document.getElementsByClassName("allienShip");
+    var sizeR=allienShipTotal.length;
+    for(var i=0;i<sizeR;i++){
+        if(allienShipTotal[i]){
+            allienShipTotal[i].remove();
+        }
+    }
+    var sizeR=allienShipTotal.length;
+    for(var i=0;i<sizeR;i++){
+        if(allienShipTotal[i]){
+            allienShipTotal[i].remove();
+        }
+    }
+    screenMsg.style.display="none";
+    clearInterval(allienShipInterval);
+    cancelAnimationFrame(frames);
+    planetHpBar=420;
+    pjx=screenSizeW/2;
+    pjy=screenSizeH/2;
+    jog.style.top=pjy+"px";
+    jog.style.left=pjx+"px";
+    allienShipCount=1000;
     game=true;
+    allienShipInterval=setInterval(createAllienShip,1000);
+    gameLoop();
+	
+}
+
+function inicia(){
+    game=false;
+
     //Screen Start
-    screeSizeH=window.innerHeight;
+    screenSizeH=window.innerHeight;
     screenSizeW=window.innerWidth;
 
     //jogador start
     dirxJ=diryJ=0;
     pjx=screenSizeW/2;
-    pjy=screeSizeH/2;
+    pjy=screenSizeH/2;
     velJ=18;
     velS=24;
     jog=document.getElementById("navJogador");
     jog.style.top=pjy+"px";
     jog.style.left=pjx+"px";
     
-
     //Controle das Allien Ships
+    allienShipCount=1000;
+    velAllienShip=6;
     
-    clearInterval(allienShipInterval);
-    allienShipCount=150;
-    velAllienShip=4;
-    allienShipInterval=setInterval(createAllienShip,1600);
 
     //Controle do Planeta
-    planetHpBar=100;
+    planetHpBar=420;
+    planetBar=document.getElementById("planetaLifeBar");
+    planetBar.style.width=planetHpBar+"px";
 
     //Explosion control
     indiceExplosao=indiceSound=0;
-    
 
-    gameLoop();
+    //screenPops
+    screenMsg=document.getElementById("screenMsg");
+    screenMsg.style.backgroundImage="url('intro1.png')";
+    screenMsg.style.display="block";
+    document.getElementById("btnPlay").addEventListener("click",restartGame);
 
 }
 

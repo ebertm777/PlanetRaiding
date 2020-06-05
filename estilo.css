@@ -57,3 +57,12 @@ body{
     height: 70px;
     position: absolute;
 }
+.screenMsg{
+    position: absolute;
+    margin-left: -25%;
+    top: 300px;
+    left: 50%;
+    width: 600px;
+    height: 400px;
+    display: none;
+}
