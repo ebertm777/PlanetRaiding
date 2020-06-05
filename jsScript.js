@@ -9,6 +9,7 @@ var planetHpBar,planetBar;
 var indiceExplosao,indiceSound;
 var screenMsg;
 
+
 function teclaDw(){
     var tecla=event.keyCode;
     if(tecla==38){ //seta cima
@@ -116,7 +117,7 @@ function collisionAllienShip(tiro){
 }
 function criaExplosao(tipo,x,y){ 
 	if(document.getElementById("explosao"+(indiceExplosao-4))){
-		document.getElementById(`explosao${indiceExplosao - 4}`).remove();
+		document.getElementById("explosao"+(indiceExplosao-4)).remove();
 	}
 	var explosao=document.createElement("div");
 	var img=document.createElement("img");
@@ -175,6 +176,7 @@ function gameControl(){
    }
    if(planetHpBar<=0){
        game=false;
+       clearInterval(allienShipInterval);
        screenMsg.style.backgroundImage="url('derrota.png')";
        screenMsg.style.display="block";
 
@@ -188,6 +190,7 @@ function gameLoop(){
     }
     gameControl();
     frames=requestAnimationFrame(gameLoop);
+
 }
 function restartGame(){
     allienShipTotal=document.getElementsByClassName("allienShip");
@@ -215,7 +218,6 @@ function restartGame(){
     game=true;
     allienShipInterval=setInterval(createAllienShip,1000);
     gameLoop();
-	
 }
 
 function inicia(){
@@ -239,7 +241,6 @@ function inicia(){
     allienShipCount=1000;
     velAllienShip=6;
     
-
     //Controle do Planeta
     planetHpBar=420;
     planetBar=document.getElementById("planetaLifeBar");
